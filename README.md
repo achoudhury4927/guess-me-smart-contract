@@ -14,10 +14,10 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">Guess Me</h3>
 
   <p align="center">
-    project_description
+    A smart contract created with solidity that lets you send the contract a secret word and if correct it will allow you to withdraw all the ethereum inside it
     <br />
     <a href="https://github.com/achoudhury4927/guess-me-smart-contract"><strong>Explore the docs »</strong></a>
     <br />
@@ -91,8 +91,17 @@ To get a local copy up and running follow these simple example steps.
 This is an example of how to list things you need to use the software and how to install them.
 
 - npm
+
   ```sh
   npm install npm@latest -g
+  ```
+
+  ```shell
+  npx hardhat help
+  npx hardhat test
+  GAS_REPORT=true npx hardhat test
+  npx hardhat node
+  npx hardhat run scripts/deploy.js
   ```
 
 ### Installation
@@ -165,7 +174,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Adil Choudhury - [@twitter_handle](https://twitter.com/twitter_handle) - contact@adilc.me
 
 Project Link: [https://github.com/achoudhury4927/guess-me-smart-contract](https://github.com/achoudhury4927/guess-me-smart-contract)
 
@@ -184,15 +193,15 @@ Project Link: [https://github.com/achoudhury4927/guess-me-smart-contract](https:
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/achoudhury4927/guess-me-smart-contract.svg?style=for-the-badge
 [contributors-url]: https://github.com/achoudhury4927/guess-me-smart-contract/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/achoudhury4927/guess-me-smart-contract.svg?style=for-the-badge
 [forks-url]: https://github.com/achoudhury4927/guess-me-smart-contract/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/achoudhury4927/guess-me-smart-contract.svg?style=for-the-badge
 [stars-url]: https://github.com/achoudhury4927/guess-me-smart-contract/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/achoudhury4927/guess-me-smart-contract.svg?style=for-the-badge
 [issues-url]: https://github.com/achoudhury4927/guess-me-smart-contract/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/achoudhury4927/guess-me-smart-contract.svg?style=for-the-badge
 [license-url]: https://github.com/achoudhury4927/guess-me-smart-contract/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
