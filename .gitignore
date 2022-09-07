@@ -4,9 +4,6 @@ coverage
 coverage.json
 typechain
 typechain-types
-contracts/Lock.sol
-scripts/deploy.js
-test/Lock.js
 
 #Hardhat files
 cache
