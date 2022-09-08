@@ -3,7 +3,7 @@ pragma solidity ^0.8.16;
 
 import "hardhat/console.sol";
 
-error GuessMe__NotOwner();
+error GuessMe__NotValidGuessCall();
 
 /** @title A contract for the guess me game
  *  @author Adil
@@ -13,15 +13,10 @@ error GuessMe__NotOwner();
  */
 contract GuessMe {
     /** @notice This holds the address of the owner of the contract
-     *  @dev This will be set in the constructor when contract is deployed
+     *  @dev This is set in the constructor when contract is deployed
      */
     address public immutable i_owner;
     string internal s_secretWord;
-
-    constructor() {
-        console.log("Setting owner as: %s", msg.sender);
-        i_owner = msg.sender;
-    }
 
     /** @notice This modifier ensures that only the owner of the contract can call a modified function
      *  @dev Using if (msg.sender != i_owner) revert GuessMe__NotOwner() costs 21231 gas
@@ -36,6 +31,39 @@ contract GuessMe {
         );
         require(msg.sender == i_owner);
         _;
+    }
+
+    constructor() {
+        console.log("Setting owner as: %s", msg.sender);
+        i_owner = msg.sender;
+    }
+
+    receive() external payable {
+        revert GuessMe__NotValidGuessCall();
+    }
+
+    fallback() external payable {
+        revert GuessMe__NotValidGuessCall();
+    }
+
+    /** @notice This function sends all the eth in the contract if you guess the correct word
+     *  @param guess is the word the sender has sent as a guess
+     */
+    function guessSecret(string memory guess) public payable {
+        if (verifyGuess(guess)) {
+            (bool sent, ) = (msg.sender).call{value: address(this).balance}("");
+            require(sent, "Wrong guess!");
+        }
+    }
+
+    /** @notice This is a helper function to verify if the guess is correct
+     *  @param guess is the word the sender has sent as a guess in the guessSecret method
+     *  @dev this method compares the keccak256 hashes of the guess parameter and s_secretWord
+     */
+    function verifyGuess(string memory guess) internal view returns (bool) {
+        return
+            keccak256(abi.encodePacked(guess)) ==
+            keccak256(abi.encodePacked(s_secretWord));
     }
 
     /** @notice This allows the owner of the contract to set the secret key

@@ -133,7 +133,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 ## Roadmap
 
-- [ ] Store Secret Key
+- [x] Store Secret Key
 - [ ] Guess
 - [ ] Withdraw Funds
 - [ ] Store Winners
