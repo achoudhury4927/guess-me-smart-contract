@@ -6,7 +6,7 @@ import "hardhat/console.sol";
 error GuessMe__NotValidGuessCall();
 
 /** @title A contract for the guess me game
- *  @author Adil
+ *  @author AdilC
  *  @notice This contract allows users to guess a secret word and allow them to withdraw all eth on the smart contract if they're correct
  *  @dev This will implement chainlink price feeds to report usd value of balance in contract
  *  @custom:experimental This is an experimental contract. Anyone can view the setting of the secret if they know how to :).
@@ -16,6 +16,10 @@ contract GuessMe {
      *  @dev This is set in the constructor when contract is deployed
      */
     address public immutable i_owner;
+
+    /** @notice This holds the secret word to be guessed by the user
+     *  @dev This can only be set by the owner of the contract
+     */
     string internal s_secretWord;
 
     /** @notice This modifier ensures that only the owner of the contract can call a modified function
@@ -39,10 +43,12 @@ contract GuessMe {
     }
 
     receive() external payable {
+        console.log("Receive was called, reverting with error");
         revert GuessMe__NotValidGuessCall();
     }
 
     fallback() external payable {
+        console.log("fallback was called, reverting with error");
         revert GuessMe__NotValidGuessCall();
     }
 
@@ -52,7 +58,7 @@ contract GuessMe {
     function guessSecret(string memory guess) public payable {
         if (verifyGuess(guess)) {
             (bool sent, ) = (msg.sender).call{value: address(this).balance}("");
-            require(sent, "Wrong guess!");
+            require(sent, "Failed to send contract balance!");
         }
     }
 

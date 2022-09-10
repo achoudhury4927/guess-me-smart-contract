@@ -43,4 +43,16 @@ describe("GuessMe", async function () {
                 .reverted;
         });
     });
+
+    describe("Guess", async function () {
+        it("Should send the contracts ether balance with the correct guess", async function () {});
+        it("Should fail with an incorrect guess and add value sent to contract balance", async function () {});
+
+        //Uncomment these test after changing function visibility
+        // describe("verifyGuess", async function () {
+        //     it("Should return TRUE with the correct string", async function () {});
+        //     it("Should return FALSE with the correct string", async function () {});
+        //     it("Should return FALSE with another data type", async function () {});
+        // });
+    });
 });
