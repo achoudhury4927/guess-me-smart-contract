@@ -56,7 +56,16 @@ contract GuessMe {
      *  @param guess is the word the sender has sent as a guess
      */
     function guessSecret(string memory guess) public payable {
+        console.log(
+            "Received %s wei in call with a guess of %s",
+            msg.value,
+            guess
+        );
         if (verifyGuess(guess)) {
+            console.log(
+                "Successful guess! Sending contract balance to %s",
+                msg.sender
+            );
             (bool sent, ) = (msg.sender).call{value: address(this).balance}("");
             require(sent, "Failed to send contract balance!");
         }

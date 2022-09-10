@@ -1,13 +1,14 @@
 const { deployments, ethers, getNamedAccounts } = require("hardhat");
 const { assert, expect } = require("chai");
 
-const secretWord = "secret";
-
 describe("GuessMe", async function () {
     let guessMe;
     let deployer;
     let accounts;
     let guessMeNotOwnerConnectedContract;
+
+    const secretWord = "secret";
+    const sendValue = ethers.utils.parseEther("1");
 
     beforeEach(async function () {
         deployer = (await getNamedAccounts()).deployer;
@@ -26,7 +27,11 @@ describe("GuessMe", async function () {
 
     describe("Secret", async function () {
         it("Should set the secret word when sender is owner", async function () {
-            await expect(guessMe.setSecretWord("test")).to.not.be.reverted;
+            const secretWordForTest = "test";
+            await expect(guessMe.setSecretWord(secretWordForTest)).to.not.be
+                .reverted;
+            const response = await guessMe.getSecretWord();
+            assert.equal(response, secretWordForTest);
         });
         it("Should fail to set when the sender is not the owner", async function () {
             await expect(
@@ -45,7 +50,36 @@ describe("GuessMe", async function () {
     });
 
     describe("Guess", async function () {
-        it("Should send the contracts ether balance with the correct guess", async function () {});
+        beforeEach(async () => {
+            await guessMe.guessSecret("test", { value: sendValue });
+            await guessMe.setSecretWord(secretWord);
+        });
+        it("Should send the contracts ether balance with the correct guess", async function () {
+            const startingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+            const startingUserBalance = await guessMe.provider.getBalance(
+                deployer
+            );
+
+            const txResponse = await guessMe.guessSecret(secretWord);
+            const txReceipt = await txResponse.wait();
+            const { gasUsed, effectiveGasPrice } = txReceipt;
+            const gasCost = gasUsed.mul(effectiveGasPrice);
+
+            const endingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+            const endingUserBalance = await guessMe.provider.getBalance(
+                deployer
+            );
+
+            assert.equal(endingContractBalance.toString(), 0);
+            assert.equal(
+                startingContractBalance.add(startingUserBalance).toString(),
+                endingUserBalance.add(gasCost).toString()
+            );
+        });
         it("Should fail with an incorrect guess and add value sent to contract balance", async function () {});
 
         //Uncomment these test after changing function visibility
