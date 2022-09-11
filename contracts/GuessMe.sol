@@ -3,7 +3,7 @@ pragma solidity ^0.8.16;
 
 import "hardhat/console.sol";
 
-error GuessMe__NotValidGuessCall();
+//error GuessMe__NotValidGuessCall();
 
 /** @title A contract for the guess me game
  *  @author AdilC
@@ -43,13 +43,13 @@ contract GuessMe {
     }
 
     receive() external payable {
-        console.log("Receive was called, reverting with error");
-        revert GuessMe__NotValidGuessCall();
+        console.log("Receive was called");
+        //revert GuessMe__NotValidGuessCall();
     }
 
     fallback() external payable {
-        console.log("fallback was called, reverting with error");
-        revert GuessMe__NotValidGuessCall();
+        console.log("fallback was called");
+        //revert GuessMe__NotValidGuessCall();
     }
 
     /** @notice This function sends all the eth in the contract if you guess the correct word

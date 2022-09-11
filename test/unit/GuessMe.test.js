@@ -84,13 +84,15 @@ describe("GuessMe", async function () {
             const startingContractBalance = await guessMe.provider.getBalance(
                 guessMe.address
             );
-            const startingUserBalance = await guessMe.provider.getBalance(
-                deployer
-            );
+            const startingUserBalance =
+                await guessMeNotOwnerConnectedContract.provider.getBalance(
+                    accounts[1].address
+                );
 
-            const txResponse = await guessMe.guessSecret("fail", {
-                value: sendValue,
-            });
+            const txResponse =
+                await guessMeNotOwnerConnectedContract.guessSecret("fail", {
+                    value: sendValue,
+                });
             const txReceipt = await txResponse.wait();
             const { gasUsed, effectiveGasPrice } = txReceipt;
             const gasCost = gasUsed.mul(effectiveGasPrice);
@@ -98,9 +100,10 @@ describe("GuessMe", async function () {
             const endingContractBalance = await guessMe.provider.getBalance(
                 guessMe.address
             );
-            const endingUserBalance = await guessMe.provider.getBalance(
-                deployer
-            );
+            const endingUserBalance =
+                await guessMeNotOwnerConnectedContract.provider.getBalance(
+                    accounts[1].address
+                );
 
             assert.equal(
                 endingContractBalance.toString(),
@@ -111,12 +114,66 @@ describe("GuessMe", async function () {
                 endingUserBalance.toString()
             );
         });
-
-        //Uncomment these test after changing function visibility
-        // describe("verifyGuess", async function () {
-        //     it("Should return TRUE with the correct string", async function () {});
-        //     it("Should return FALSE with the correct string", async function () {});
-        //     it("Should return FALSE with another data type", async function () {});
-        // });
     });
+
+    describe("Receive", async function () {
+        it("Should revert when receive is called", async function () {
+            const startingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+            const tx = await accounts[1].sendTransaction({
+                to: guessMe.address,
+                value: sendValue,
+            });
+            console.log(tx);
+            const endingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+            assert.equal(
+                endingContractBalance.toString(),
+                startingContractBalance.add(sendValue).toString()
+            );
+        });
+        it("Should revert when fallback is called", async function () {
+            const callFallbackSignature = "callFallback(uint256,uint256)";
+            const guessMeFakeContract = new ethers.Contract(
+                guessMe.address,
+                [
+                    ...guessMe.interface.fragments,
+                    `function ${callFallbackSignature}`,
+                ],
+                accounts[1]
+            );
+            const startingContractBalance =
+                await guessMeFakeContract.provider.getBalance(guessMe.address);
+            await expect(guessMeFakeContract[callFallbackSignature](8, 9)).to
+                .not.be.reverted;
+            const endingContractBalance =
+                await guessMeFakeContract.provider.getBalance(guessMe.address);
+            assert.equal(
+                startingContractBalance.toString(),
+                endingContractBalance.toString()
+            );
+        });
+    });
+
+    // Uncomment these test after changing function visibility from internal to public
+    // describe("verifyGuess", async function () {
+    //     beforeEach(async () => {
+    //         await guessMe.setSecretWord(secretWord);
+    //     });
+    //     it("Should return TRUE with the correct string", async function () {
+    //         //const expectedResponse = true;
+    //         const txResponse = await guessMe.verifyGuess(secretWord);
+    //         assert.isTrue(txResponse);
+    //     });
+    //     it("Should return FALSE with an incorrect string", async function () {
+    //         const txResponse = await guessMe.verifyGuess("fail");
+    //         assert.isNotTrue(txResponse);
+    //     });
+    //     it("Should return FALSE with another data type", async function () {
+    //         const txResponse = await guessMe.verifyGuess(deployer);
+    //         assert.isNotTrue(txResponse);
+    //     });
+    // });
 });
