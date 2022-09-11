@@ -18,7 +18,7 @@ describe("GuessMe", async function () {
         guessMeNotOwnerConnectedContract = await guessMe.connect(accounts[1]);
     });
 
-    describe("Deploment", async function () {
+    describe("Deployment", async function () {
         it("Should set the correct owner", async function () {
             const response = await guessMe.i_owner();
             assert.equal(response, deployer);
@@ -80,7 +80,37 @@ describe("GuessMe", async function () {
                 endingUserBalance.add(gasCost).toString()
             );
         });
-        it("Should fail with an incorrect guess and add value sent to contract balance", async function () {});
+        it("Should fail with an incorrect guess and add value sent to contract balance", async function () {
+            const startingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+            const startingUserBalance = await guessMe.provider.getBalance(
+                deployer
+            );
+
+            const txResponse = await guessMe.guessSecret("fail", {
+                value: sendValue,
+            });
+            const txReceipt = await txResponse.wait();
+            const { gasUsed, effectiveGasPrice } = txReceipt;
+            const gasCost = gasUsed.mul(effectiveGasPrice);
+
+            const endingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+            const endingUserBalance = await guessMe.provider.getBalance(
+                deployer
+            );
+
+            assert.equal(
+                endingContractBalance.toString(),
+                startingContractBalance.add(sendValue).toString()
+            );
+            assert.equal(
+                startingUserBalance.sub(gasCost).sub(sendValue).toString(),
+                endingUserBalance.toString()
+            );
+        });
 
         //Uncomment these test after changing function visibility
         // describe("verifyGuess", async function () {
