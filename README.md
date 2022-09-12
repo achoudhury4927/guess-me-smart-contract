@@ -17,7 +17,7 @@
 <h3 align="center">Guess Me</h3>
 
   <p align="center">
-    A smart contract created with solidity that lets you send the contract a secret word and if correct it will allow you to withdraw all the ethereum inside it. It SHOULDN'T require guessing if you understand blockchains.
+    A smart contract created with solidity that lets you play the guessing game!
     <br />
     <a href="https://github.com/achoudhury4927/guess-me-smart-contract"><strong>Explore the docs »</strong></a>
     <br />
@@ -52,7 +52,6 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -60,20 +59,17 @@
 
 ## About The Project
 
-
+A smart contract created with solidity that lets you send the contract a secret word and if correct, it will send you the contracts balance.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
-- [![Next][next.js]][next-url]
-- [![React][react.js]][react-url]
-- [![Vue][vue.js]][vue-url]
-- [![Angular][angular.io]][angular-url]
-- [![Svelte][svelte.dev]][svelte-url]
-- [![Laravel][laravel.com]][laravel-url]
-- [![Bootstrap][bootstrap.com]][bootstrap-url]
-- [![JQuery][jquery.com]][jquery-url]
+- Solidity 
+- Hardhat
+- Ethers.js
+- Mocha
+- Chai
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -81,25 +77,16 @@
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+You will need yarn to install the packages. Yarn can be installed through the npm package manager which comes bundled with Node.js when you install it on your system.
 
-- npm
+- yarn
 
   ```sh
-  npm install npm@latest -g
-  ```
-
-  ```shell
-  npx hardhat help
-  npx hardhat test
-  GAS_REPORT=true npx hardhat test
-  npx hardhat node
-  npx hardhat run scripts/deploy.js
+  npm install --global yarn
   ```
 
 ### Installation
@@ -134,7 +121,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Roadmap
 
 - [x] Store Secret Key
-- [ ] Guess
+- [x] Guess
 - [ ] Withdraw Funds
 - [ ] Store Winners
 
@@ -190,19 +177,3 @@ Project Link: [https://github.com/achoudhury4927/guess-me-smart-contract](https:
 [license-url]: https://github.com/achoudhury4927/guess-me-smart-contract/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
-[next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[next-url]: https://nextjs.org/
-[react.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[react-url]: https://reactjs.org/
-[vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[vue-url]: https://vuejs.org/
-[angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[angular-url]: https://angular.io/
-[svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[svelte-url]: https://svelte.dev/
-[laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[laravel-url]: https://laravel.com
-[bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[bootstrap-url]: https://getbootstrap.com
-[jquery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[jquery-url]: https://jquery.com

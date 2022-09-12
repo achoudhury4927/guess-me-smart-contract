@@ -125,7 +125,6 @@ describe("GuessMe", async function () {
                 to: guessMe.address,
                 value: sendValue,
             });
-            console.log(tx);
             const endingContractBalance = await guessMe.provider.getBalance(
                 guessMe.address
             );
@@ -134,25 +133,24 @@ describe("GuessMe", async function () {
                 startingContractBalance.add(sendValue).toString()
             );
         });
+    });
+
+    describe("Fallback", async function () {
         it("Should revert when fallback is called", async function () {
-            const callFallbackSignature = "callFallback(uint256,uint256)";
-            const guessMeFakeContract = new ethers.Contract(
-                guessMe.address,
-                [
-                    ...guessMe.interface.fragments,
-                    `function ${callFallbackSignature}`,
-                ],
-                accounts[1]
+            const startingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
             );
-            const startingContractBalance =
-                await guessMeFakeContract.provider.getBalance(guessMe.address);
-            await expect(guessMeFakeContract[callFallbackSignature](8, 9)).to
-                .not.be.reverted;
-            const endingContractBalance =
-                await guessMeFakeContract.provider.getBalance(guessMe.address);
+            const tx = await accounts[1].sendTransaction({
+                to: guessMe.address,
+                value: sendValue,
+                data: "0x1567987489",
+            });
+            const endingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
             assert.equal(
-                startingContractBalance.toString(),
-                endingContractBalance.toString()
+                endingContractBalance.toString(),
+                startingContractBalance.add(sendValue).toString()
             );
         });
     });
