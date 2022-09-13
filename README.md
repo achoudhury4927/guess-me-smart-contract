@@ -11,7 +11,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/achoudhury4927/guess-me-smart-contract">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Guess Me</h3>
@@ -122,7 +122,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 - [x] Store Secret Key
 - [x] Guess
-- [ ] Withdraw Funds
+- [x] Rescue funds
 - [ ] Store Winners
 
 See the [open issues](https://github.com/achoudhury4927/guess-me-smart-contract/issues) for a full list of proposed features (and known issues).

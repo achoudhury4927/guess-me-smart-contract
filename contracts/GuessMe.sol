@@ -24,8 +24,8 @@ contract GuessMe {
 
     /** @notice This modifier ensures that only the owner of the contract can call a modified function
      *  @dev Using if (msg.sender != i_owner) revert GuessMe__NotOwner() costs 21231 gas
-     *  @dev Using require(msg.sender == owner, "Not Owner") costs 21485 gas. Longer string increases gas.
-     *  @dev Current implementation only costs 21192 gas
+     *       Using require(msg.sender == owner, "Not Owner") costs 21485 gas. Longer string increases gas.
+     *       Current implementation only costs 21192 gas
      */
     modifier onlyOwner() {
         console.log(
@@ -95,5 +95,17 @@ contract GuessMe {
     function getSecretWord() public view onlyOwner returns (string memory) {
         console.log("returning secret word of %s", s_secretWord);
         return s_secretWord;
+    }
+
+    /** @notice This allows the owner of the contract to withdraw the contract balance
+     */
+    function rescue() public payable onlyOwner {
+        console.log(
+            "Withdrawing the contract balance of %s to address %s",
+            address(this).balance,
+            msg.sender
+        );
+        (bool sent, ) = (i_owner).call{value: address(this).balance}("");
+        require(sent, "Failed to send contract balance!");
     }
 }

@@ -1,5 +1,6 @@
 const { deployments, ethers, getNamedAccounts } = require("hardhat");
 const { assert, expect } = require("chai");
+const GasCostCalculator = require("../util/GasCostCalculator");
 
 describe("GuessMe", async function () {
     let guessMe;
@@ -63,9 +64,7 @@ describe("GuessMe", async function () {
             );
 
             const txResponse = await guessMe.guessSecret(secretWord);
-            const txReceipt = await txResponse.wait();
-            const { gasUsed, effectiveGasPrice } = txReceipt;
-            const gasCost = gasUsed.mul(effectiveGasPrice);
+            const gasCost = await GasCostCalculator(txResponse);
 
             const endingContractBalance = await guessMe.provider.getBalance(
                 guessMe.address
@@ -93,9 +92,7 @@ describe("GuessMe", async function () {
                 await guessMeNotOwnerConnectedContract.guessSecret("fail", {
                     value: sendValue,
                 });
-            const txReceipt = await txResponse.wait();
-            const { gasUsed, effectiveGasPrice } = txReceipt;
-            const gasCost = gasUsed.mul(effectiveGasPrice);
+            const gasCost = await GasCostCalculator(txResponse);
 
             const endingContractBalance = await guessMe.provider.getBalance(
                 guessMe.address
@@ -117,7 +114,7 @@ describe("GuessMe", async function () {
     });
 
     describe("Receive", async function () {
-        it("Should revert when receive is called", async function () {
+        it("Should update balance when receive is called", async function () {
             const startingContractBalance = await guessMe.provider.getBalance(
                 guessMe.address
             );
@@ -136,7 +133,7 @@ describe("GuessMe", async function () {
     });
 
     describe("Fallback", async function () {
-        it("Should revert when fallback is called", async function () {
+        it("Should update balance when fallback is called", async function () {
             const startingContractBalance = await guessMe.provider.getBalance(
                 guessMe.address
             );
@@ -151,6 +148,53 @@ describe("GuessMe", async function () {
             assert.equal(
                 endingContractBalance.toString(),
                 startingContractBalance.add(sendValue).toString()
+            );
+        });
+    });
+
+    describe("Rescue", async function () {
+        beforeEach(async () => {
+            await guessMe.guessSecret("test", { value: sendValue });
+        });
+        it("Should withdraw contract balance when rescue is called by owner", async function () {
+            const startingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+            const startingUserBalance = await guessMe.provider.getBalance(
+                deployer
+            );
+
+            const txResponse = await guessMe.rescue();
+            const gasCost = await GasCostCalculator(txResponse);
+
+            const endingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+            const endingUserBalance = await guessMe.provider.getBalance(
+                deployer
+            );
+
+            assert.equal(endingContractBalance.toString(), 0);
+            assert.equal(
+                startingContractBalance.add(startingUserBalance).toString(),
+                endingUserBalance.add(gasCost).toString()
+            );
+        });
+        it("Should revert when rescue called by an address other than the owner", async function () {
+            const startingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+
+            await expect(guessMeNotOwnerConnectedContract.rescue()).to.be
+                .reverted;
+
+            const endingContractBalance = await guessMe.provider.getBalance(
+                guessMe.address
+            );
+
+            assert.equal(
+                endingContractBalance.toString(),
+                startingContractBalance.toString()
             );
         });
     });
