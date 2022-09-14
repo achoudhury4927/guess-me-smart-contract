@@ -120,10 +120,18 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 ## Roadmap
 
-- [x] Store Secret Key
-- [x] Guess
-- [x] Rescue funds
-- [ ] Store Winners
+- [ ] Smart Contract
+  - [x] Store Secret Key
+  - [x] Guess
+  - [x] Rescue funds
+  - [ ] Store Winners
+- [ ] Front End
+  - [ ] Basic UI
+  - [ ] Connect wallet
+  - [ ] Guess from UI
+  - [ ] List winners and amounts
+- [ ] Deployment on Goerli
+- [ ] Deployment on website
 
 See the [open issues](https://github.com/achoudhury4927/guess-me-smart-contract/issues) for a full list of proposed features (and known issues).
 
