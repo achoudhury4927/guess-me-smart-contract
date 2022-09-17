@@ -22,6 +22,15 @@ contract GuessMe {
      */
     string internal s_secretWord;
 
+    /** @notice This struct contains the winners address, the balance sent by the contract, and the current usd value of the balance
+     *  @dev The usd value will be retrieved using chainlink oracles
+     */
+    struct WinnersStruct {
+        address sender;
+        uint256 winning;
+        uint256 winningsInUsd;
+    }
+
     /** @notice This modifier ensures that only the owner of the contract can call a modified function
      *  @dev Using if (msg.sender != i_owner) revert GuessMe__NotOwner() costs 21231 gas
      *       Using require(msg.sender == owner, "Not Owner") costs 21485 gas. Longer string increases gas.
