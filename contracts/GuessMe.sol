@@ -3,8 +3,6 @@ pragma solidity ^0.8.16;
 
 import "hardhat/console.sol";
 
-//error GuessMe__NotValidGuessCall();
-
 /** @title A contract for the guess me game
  *  @author AdilC
  *  @notice This contract allows users to guess a secret word and allow them to withdraw all eth on the smart contract if they're correct
@@ -30,6 +28,19 @@ contract GuessMe {
         uint256 winning;
         uint256 winningsInUsd;
     }
+
+    /** @notice This array holds all the details to display of a winner
+     */
+    WinnersStruct[] s_winners;
+
+    /** @notice An event that emits the winner, the amount won in Eth and USD, and the timestamp of the transaction
+     */
+    event Win(
+        address sender,
+        uint256 amountWon,
+        uint256 amountWonInUsd,
+        uint256 timestamp
+    );
 
     /** @notice This modifier ensures that only the owner of the contract can call a modified function
      *  @dev Using if (msg.sender != i_owner) revert GuessMe__NotOwner() costs 21231 gas
@@ -75,19 +86,22 @@ contract GuessMe {
                 "Successful guess! Sending contract balance to %s",
                 msg.sender
             );
+            addWinner();
             (bool sent, ) = (msg.sender).call{value: address(this).balance}("");
             require(sent, "Failed to send contract balance!");
         }
     }
 
-    /** @notice This is a helper function to verify if the guess is correct
-     *  @param guess is the word the sender has sent as a guess in the guessSecret method
-     *  @dev this method compares the keccak256 hashes of the guess parameter and s_secretWord
+    /** @notice This allows the owner of the contract to withdraw the contract balance
      */
-    function verifyGuess(string memory guess) internal view returns (bool) {
-        return
-            keccak256(abi.encodePacked(guess)) ==
-            keccak256(abi.encodePacked(s_secretWord));
+    function rescue() public payable onlyOwner {
+        console.log(
+            "Withdrawing the contract balance of %s to address %s",
+            address(this).balance,
+            msg.sender
+        );
+        (bool sent, ) = (i_owner).call{value: address(this).balance}("");
+        require(sent, "Failed to send contract balance!");
     }
 
     /** @notice This allows the owner of the contract to set the secret key
@@ -106,15 +120,28 @@ contract GuessMe {
         return s_secretWord;
     }
 
-    /** @notice This allows the owner of the contract to withdraw the contract balance
+    /** @notice This allows the owner of the contract to set the secret key
+     *  @return s_secretWord is returned if the owner wants to check what the word is
      */
-    function rescue() public payable onlyOwner {
-        console.log(
-            "Withdrawing the contract balance of %s to address %s",
-            address(this).balance,
-            msg.sender
-        );
-        (bool sent, ) = (i_owner).call{value: address(this).balance}("");
-        require(sent, "Failed to send contract balance!");
+    function getWinners() public view returns (WinnersStruct[] memory) {
+        console.log("returning winners struct");
+        return s_winners;
+    }
+
+    /** @notice This is a helper function to verify if the guess is correct
+     *  @param guess is the word the sender has sent as a guess in the guessSecret method
+     *  @dev this method compares the keccak256 hashes of the guess parameter and s_secretWord
+     */
+    function verifyGuess(string memory guess) internal view returns (bool) {
+        return
+            keccak256(abi.encodePacked(guess)) ==
+            keccak256(abi.encodePacked(s_secretWord));
+    }
+
+    /** @notice This is a helper function to add winners and emit a Win event
+     */
+    function addWinner() internal {
+        s_winners.push(WinnersStruct(msg.sender, address(this).balance, 0));
+        emit Win(msg.sender, address(this).balance, 0, block.timestamp);
     }
 }
