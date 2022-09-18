@@ -133,6 +133,11 @@ contract GuessMe {
      *  @dev this method compares the keccak256 hashes of the guess parameter and s_secretWord
      */
     function verifyGuess(string memory guess) internal view returns (bool) {
+        console.log(
+            "Verifying that the secretWord %s is equal to the guess of %s",
+            s_secretWord,
+            guess
+        );
         return
             keccak256(abi.encodePacked(guess)) ==
             keccak256(abi.encodePacked(s_secretWord));
@@ -141,6 +146,7 @@ contract GuessMe {
     /** @notice This is a helper function to add winners and emit a Win event
      */
     function addWinner() internal {
+        console.log("Adding winner with address %s to winners", msg.sender);
         s_winners.push(WinnersStruct(msg.sender, address(this).balance, 0));
         emit Win(msg.sender, address(this).balance, 0, block.timestamp);
     }

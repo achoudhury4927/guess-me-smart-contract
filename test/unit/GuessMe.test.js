@@ -1,5 +1,6 @@
 const { deployments, ethers, getNamedAccounts } = require("hardhat");
 const { assert, expect } = require("chai");
+const helpers = require("@nomicfoundation/hardhat-network-helpers");
 const GasCostCalculator = require("../util/GasCostCalculator");
 
 describe("GuessMe", async function () {
@@ -110,6 +111,60 @@ describe("GuessMe", async function () {
                 startingUserBalance.sub(gasCost).sub(sendValue).toString(),
                 endingUserBalance.toString()
             );
+        });
+    });
+
+    describe("Winner", async function () {
+        beforeEach(async () => {
+            await guessMe.guessSecret("test", { value: sendValue });
+            await guessMe.setSecretWord(secretWord);
+        });
+        it("Should add the winners address, amount of eth won and eth in usd value to the winners array", async function () {
+            await guessMeNotOwnerConnectedContract.guessSecret(secretWord);
+            let [winner] = await guessMe.getWinners();
+            assert.equal(winner[0], accounts[1].address);
+            assert.equal(winner[1].toString(), sendValue.toString());
+            assert.equal(winner[2].toString(), "0");
+        });
+        it("Should emit an event with a winning guess", async function () {
+            await expect(
+                guessMeNotOwnerConnectedContract.guessSecret(secretWord)
+            )
+                .to.emit(guessMe, "Win")
+                .withArgs(
+                    accounts[1].address,
+                    sendValue,
+                    1,
+                    await helpers.time.latest()
+                );
+        });
+        it("Should add the same winner twice", async function () {
+            await guessMeNotOwnerConnectedContract.guessSecret(secretWord);
+            const testSendValue = ethers.utils.parseEther("2");
+            await guessMe.guessSecret("test", { value: testSendValue });
+            await guessMeNotOwnerConnectedContract.guessSecret(secretWord);
+
+            let [winner1, winner2] = await guessMe.getWinners();
+            assert.equal(winner1[0], accounts[1].address);
+            assert.equal(winner1[1].toString(), sendValue.toString());
+            assert.equal(winner1[2].toString(), "0");
+            assert.equal(winner2[0], accounts[1].address);
+            assert.equal(winner2[1].toString(), testSendValue.toString());
+            assert.equal(winner2[2].toString(), "0");
+        });
+        it("Should add different winners", async function () {
+            await guessMe.guessSecret(secretWord);
+            const testSendValue = ethers.utils.parseEther("2");
+            await guessMe.guessSecret("test", { value: testSendValue });
+            await guessMeNotOwnerConnectedContract.guessSecret(secretWord);
+
+            let [winner1, winner2] = await guessMe.getWinners();
+            assert.equal(winner1[0], deployer);
+            assert.equal(winner1[1].toString(), sendValue.toString());
+            assert.equal(winner1[2].toString(), "0");
+            assert.equal(winner2[0], accounts[1].address);
+            assert.equal(winner2[1].toString(), testSendValue.toString());
+            assert.equal(winner2[2].toString(), "0");
         });
     });
 

@@ -125,6 +125,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
   - [x] Guess
   - [x] Rescue funds
   - [ ] Store Winners
+  - [ ] Chainlink Pricefeed Integration
 - [ ] Front End
   - [ ] Basic UI
   - [ ] Connect wallet
