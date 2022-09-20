@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
+import "./EthInUsdConverter.sol";
 import "hardhat/console.sol";
 
 /** @title A contract for the guess me game
  *  @author AdilC
  *  @notice This contract allows users to guess a secret word and allow them to withdraw all eth on the smart contract if they're correct
  *  @dev This will implement chainlink price feeds to report usd value of balance in contract
- *  @custom:experimental This is an experimental contract. Anyone can view the setting of the secret if they know how to :).
+ *  @custom:experimental This is an experimental contract. Anyone can view the setting of the secret if they know how to.
  */
 contract GuessMe {
+    using EthInUsdConverter for uint256;
     /** @notice This holds the address of the owner of the contract
      *  @dev This is set in the constructor when contract is deployed
      */
@@ -147,7 +149,18 @@ contract GuessMe {
      */
     function addWinner() internal {
         console.log("Adding winner with address %s to winners", msg.sender);
-        s_winners.push(WinnersStruct(msg.sender, address(this).balance, 0));
-        emit Win(msg.sender, address(this).balance, 0, block.timestamp);
+        s_winners.push(
+            WinnersStruct(
+                msg.sender,
+                address(this).balance,
+                address(this).balance.getConversionRate()
+            )
+        );
+        emit Win(
+            msg.sender,
+            address(this).balance,
+            address(this).balance.getConversionRate(),
+            block.timestamp
+        );
     }
 }
