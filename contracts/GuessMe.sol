@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "./EthInUsdConverter.sol";
 import "hardhat/console.sol";
 
@@ -35,6 +36,8 @@ contract GuessMe {
      */
     WinnersStruct[] s_winners;
 
+    AggregatorV3Interface public priceFeed;
+
     /** @notice An event that emits the winner, the amount won in Eth and USD, and the timestamp of the transaction
      */
     event Win(
@@ -59,9 +62,14 @@ contract GuessMe {
         _;
     }
 
-    constructor() {
+    constructor(address priceFeedAddress) {
         console.log("Setting owner as: %s", msg.sender);
         i_owner = msg.sender;
+        console.log(
+            "Setting chainlink contract address as: %s",
+            priceFeedAddress
+        );
+        priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
     receive() external payable {
@@ -153,13 +161,13 @@ contract GuessMe {
             WinnersStruct(
                 msg.sender,
                 address(this).balance,
-                address(this).balance.getConversionRate()
+                address(this).balance.getConversionRate(priceFeed)
             )
         );
         emit Win(
             msg.sender,
             address(this).balance,
-            address(this).balance.getConversionRate(),
+            address(this).balance.getConversionRate(priceFeed),
             block.timestamp
         );
     }
