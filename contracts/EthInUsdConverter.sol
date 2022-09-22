@@ -18,7 +18,7 @@ library EthInUsdConverter {
     function getConversionRate(
         uint256 ethAmount,
         AggregatorV3Interface priceFeed
-    ) public view returns (uint256) {
+    ) internal view returns (uint256) {
         //Goerli ETH/USD chainlink address: 0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e
         (, int256 answer, , , ) = priceFeed.latestRoundData();
         uint256 ethUsdPrice = uint256(answer * 1e10);

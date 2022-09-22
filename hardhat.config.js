@@ -5,7 +5,9 @@ require("hardhat-deploy");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-    solidity: "0.8.16",
+    solidity: {
+        compilers: [{ version: "0.6.6" }, { version: "0.8.16" }],
+    },
     defaultNetwork: "hardhat",
     gasReporter: {
         enabled: true,
