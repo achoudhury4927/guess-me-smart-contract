@@ -124,7 +124,7 @@ describe("GuessMe", async function () {
             let [winner] = await guessMe.getWinners();
             assert.equal(winner[0], accounts[1].address);
             assert.equal(winner[1].toString(), sendValue.toString());
-            assert.equal(winner[2].toString(), "0");
+            assert.equal(winner[2].toString(), "2000");
         });
         it("Should emit an event with a winning guess", async function () {
             await expect(
@@ -134,7 +134,7 @@ describe("GuessMe", async function () {
                 .withArgs(
                     accounts[1].address,
                     sendValue,
-                    1,
+                    2000,
                     await helpers.time.latest()
                 );
         });
@@ -147,10 +147,10 @@ describe("GuessMe", async function () {
             let [winner1, winner2] = await guessMe.getWinners();
             assert.equal(winner1[0], accounts[1].address);
             assert.equal(winner1[1].toString(), sendValue.toString());
-            assert.equal(winner1[2].toString(), "0");
+            assert.equal(winner1[2].toString(), "2000");
             assert.equal(winner2[0], accounts[1].address);
             assert.equal(winner2[1].toString(), testSendValue.toString());
-            assert.equal(winner2[2].toString(), "0");
+            assert.equal(winner2[2].toString(), "4000");
         });
         it("Should add different winners", async function () {
             await guessMe.guessSecret(secretWord);
@@ -161,10 +161,10 @@ describe("GuessMe", async function () {
             let [winner1, winner2] = await guessMe.getWinners();
             assert.equal(winner1[0], deployer);
             assert.equal(winner1[1].toString(), sendValue.toString());
-            assert.equal(winner1[2].toString(), "0");
+            assert.equal(winner1[2].toString(), "2000");
             assert.equal(winner2[0], accounts[1].address);
             assert.equal(winner2[1].toString(), testSendValue.toString());
-            assert.equal(winner2[2].toString(), "0");
+            assert.equal(winner2[2].toString(), "4000");
         });
     });
 
