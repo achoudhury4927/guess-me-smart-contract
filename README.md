@@ -120,12 +120,14 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 ## Roadmap
 
-- [x] Smart Contract
-  - [x] Store Secret Key
+- [ ] Smart Contract
+  - [x] Store Secret Key as plaintext
+    - [ ] Store Secret Key as hash
   - [x] Guess
   - [x] Rescue funds
   - [x] Store Winners
   - [x] Chainlink Pricefeed Integration
+  - [ ] Zero-Knowledge Proof of hash
 - [ ] Front End
   - [ ] Basic UI
   - [ ] Connect wallet
