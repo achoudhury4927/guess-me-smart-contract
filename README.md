@@ -111,9 +111,25 @@ You will need yarn to install the packages. Yarn can be installed through the np
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+In lieu of a full front end to interact with which is planned to be built with NextJS I have created a simple HTML page that can be used to verify guessing is working.
+<div align="center">
+  <a href="https://github.com/achoudhury4927/guess-me-smart-contract">
+      <img src="simplehtml.png" alt="Simple">
+  </a>
+</div>
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+I ran this using the following VSCode plugin:
+
+<ul>
+  <li>Name: Live Server</li>
+  <li>Id: ritwickdey.LiveServer</li>
+  <li>Description: Launch a development local Server with live reload feature for static & dynamic pages</li>
+  <li>Version: 5.7.9</li>
+  <li>Publisher: Ritwick Dey</li>
+  <li>VS Marketplace: <a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">Get it Here</a></li>
+</ul>
+
+<!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -129,6 +145,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
   - [x] Store Winners
   - [x] Chainlink Pricefeed Integration
   - [ ] Zero-Knowledge Proof of hash
+- [x] Simple HTML  
 - [ ] Front End
   - [ ] Basic UI
   - [ ] Connect wallet
