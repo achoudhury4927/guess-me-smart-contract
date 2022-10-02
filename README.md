@@ -177,7 +177,7 @@ Don't forget to give the project a star! Thanks again!
 
 ## Acknowledgement
 
-@FronzenFire#8389 On the Dail Gwei Discord explaining hows bots can attack this contract and suggesting ZK-Proofs
+@FronzenFire#8389 On the Daily Gwei Discord explaining hows bots can attack this contract and suggesting ZK-Proofs
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
